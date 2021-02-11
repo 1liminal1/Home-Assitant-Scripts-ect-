@@ -1,4 +1,29 @@
-  - platform: template
+
+alias: Close Doors
+sequence:
+ - service: notify.alexa_media
+   data_template:
+     target:
+       - media_player.bedroom_echo_show
+       - media_player.bathroom
+       - media_player.kitchen
+     data:
+       type: announce
+     message: >
+       {% set door = is_state('binary_sensor.balcony_door_contact', 'open') %}
+       {% set window = is_state('binary_sensor.bedroom_window_contact', 'open') %}
+       {% if door and window %}  Please close the balcony door and bedroom window?
+       {% elif window %} Please close the bedroom window.
+       {% elif door %} Please close the balcony door.
+       {% else %} Everything is closed.
+       {% endif %}
+
+
+
+
+
+
+- platform: template
     sensors:
       sean_location:
         value_template: '{{ states.input_select.sean_location_dropdown.state }}'
